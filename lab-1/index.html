@@ -1,36 +1,73 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>Lab - Multimedia Programming 2563 ITKMITL</title>
+	<link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
 	<link rel=stylesheet href="../src/reset.css">
 	<link rel=stylesheet href="lab.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<style>
+		body {
+			font-family: 'Itim', cursive;
+		}
+	</style>
 </head>
+<center>
 <body class="paper">
-	<div id="app">
-		<input type="number">
-		<div class="space"></div>
-		<h4>{{number}} x 1 = x</h4>
-		<h4>{{number}} x 2 = x</h4>
-		<h4>{{number}} x 3 = x</h4>
-		<h4>{{number}} x 4 = x</h4>
-		<h4>{{number}} x 5 = x</h4>
-		<h4>{{number}} x 6 = x</h4>
-		<h4>{{number}} x 7 = x</h4>
-		<h4>{{number}} x 8 = x</h4>
-		<h4>{{number}} x 9 = x</h4>
-		<h4>{{number}} x 10 = x</h4>
-		<h4>{{number}} x 11 = x</h4>
-		<h4>{{number}} x 12 = x</h4>
-	</div>
+		<div id="app">
+			<div class="columns is-centered">
+				<div class="column is-one-fifth"><input class="input" min="1" type="number" v-model="number"></div>
+				<div class="column is-one-fifth"><input class="input" min="1" type="number" v-model="row"></div>
+			</div>
+				<div class="space"></div>
+				<h1>สูตรคูณแม่ {{number}}</h1>
+				<h4>แม่ก่อนหน้า --> แม่ {{before_n}}</h4>
+				<div v-for="i in r" class="row">
+					{{number}} x <i>{{i}}</i> = <b>{{multiply(i)}}</b>
+				</div>
+				<h4>ผลรวม {{total}}</h4>
+			</div>
+		</div>
 
-	<script>
-		let app = new Vue({
-			el: '#app',
-			data: {
-				number: 2
-			}
-		})
-	</script>
+		<script>
+			let app = new Vue({
+				el: '#app',
+				data: {
+					number: 2,
+					row: 12,
+					before_n: 1
+				},
+				methods: {
+					multiply: function (x) {
+						return this.number * x
+					}
+				},
+
+				computed: {
+					x2: function () {
+						return this.number * 2
+					},
+					r: function () {
+						return parseInt(this.row)
+					},
+					total: function(){
+						let sum = 0
+						for (var i = 1; i <= this.r; i++) {
+							sum = sum + (this.multiply(i))
+						}
+                    return sum
+					}
+				},
+				watch: {
+					number: function (value, old) {
+						this.before_n = old
+					}
+				}
+			})
+		</script>
+		</center>
 </body>
+
 </html>
