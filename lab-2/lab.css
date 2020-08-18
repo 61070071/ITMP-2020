@@ -1,0 +1,20 @@
+:root{
+	--ci1:#000;
+	--ci2:#666;
+	--ci3:#888;
+	--link:var(--ci1);
+	--link-hover:var(--ci2);
+	--btn-bg:var(--ci1);
+	--btn-bg-hover:var(--ci2);
+	--nav-link:var(--ci1);
+	--nav-hover:var(--ci2);
+	--bg-color:#fff;
+	--text-color:#333;
+	--box-shadow:0 13px 27px -5px hsl(327deg 100% 50% / 30%), 0 8px 16px -8px hsla(0, 0%, 0%, 0.3), 0 -6px 16px -6px hsla(0, 0%, 0%, 0.03);
+	--txt-font: var(--font-anuphan);
+	--pmr-font: var(--font-anuphan);
+}
+.round{
+	border-radius: 25px;
+	/* border-radius: 8px; */
+}
