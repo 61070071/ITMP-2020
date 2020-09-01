@@ -57,15 +57,15 @@
 						app.correct()
 					}
 					else{
-						app.score--
+						app.score-=10
 					}
 				},
 				correct: function(){
-					this.row = rand(2,8)
+					this.row = rand(2,12)
 					this.pick = rand(1,this.row*this.row)
-					this.score++
+					this.score+=5
 					this.h = rand(0,360)
-					this.l = rand(20,70)
+					this.l = rand(25,60)
 
 				}
 			}
@@ -80,6 +80,7 @@
 				clearInterval(counter)
 				alert("Score = " + app.score)
 				app.score = 0
+				location.reload()
 			}
 		},1000);
 	</script>
