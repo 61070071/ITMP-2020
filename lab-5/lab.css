@@ -84,7 +84,7 @@ div.box{
 }
 .box._path{
 	background-color: black;
-	background-image: url('tile-wood.jpg');
+	background-image: url('road.png');
 	background-size: cover;
 	transform: rotate(0deg);
 }
