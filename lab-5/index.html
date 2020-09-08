@@ -87,7 +87,7 @@
 							if (this.fruits[f].pst == 11) {
 								this.fruits[f].pst = this.fruits[f].pst + 1
 								if (this.fruits[f].type == 'red') {
-									this.score++
+									this.score+=100
 									this.speed-=200
 								}
 								else if(this.fruits[f].type == 'yellow'){
@@ -99,7 +99,7 @@
 							else if(this.fruits[f].pst == 13) {
 								this.fruits[f].pst = this.fruits[f].pst + 3
 								if (this.fruits[f].type == 'yellow') {
-									this.score++
+									this.score+=100
 									this.speed-=200
 								}
 								else if(this.fruits[f].type == 'red'){
