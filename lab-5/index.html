@@ -10,18 +10,18 @@
 	<div id="canvas">
 		<section id="canvas_header">
 			<div>
-				-- แสดงคะแนน
+				score = {{score}}
 			</div>
 		</section>
 		<section id="canvas_main" 
-		:data-play="play">
+		:data-play="play"><!--ถ้า play ถูกเปลี่ยนตรงไหน อันนี้ก็เปลี่ยนไปด้วย-->
 			<main>
 				<div class="box _path" 
 				v-for="i in 14" 
 				:data-pst="i"></div>
-				<div class="box _toggle" data-pst="10" data-isrightarrow="1"></div>
+				<div class="box _toggle" data-pst="10" :data-isRightArrow="isRightArrow"></div>
 
-				<div class="box _fruit"></div>
+				<div class="box _fruit" v-for="f in fruits":data-pst="f.pst":data-type="f.type"></div>
 
 				<div class="box _origin"></div>
 				<div class="box _12" data-pst="12"></div>
@@ -30,38 +30,125 @@
 			</main>
 		</section>
 		<section id="canvas_footer">
-			<div v-if="play" class="btn" id="toggle">
-				Toggle
+			<div v-if="play" class="btn" id="toggle" @click="ClickToggle()"><!--ถ้า play เป็น true จะแสดง Toggle-->
+				Change Roid
 			</div>
-			<div v-if="!play" class="btn" id="endgame">
-				Ene Game
+			<div v-if="!play" class="btn" id="endgame" @click="ReGame()"><!--ถ้า play เป็น false จะแสดง End Game-->
+				Restart
 			</div>
 		</section>
 	</div>
-
 	<script>
 		function rand(start,stop){
 			let shift = (stop-start)+1
 			return Math.floor(Math.random()*100%shift)+start
 		}
-		
-		let fruitCount = 5
-		let isRightArrow = 1
-		let speed = 1000
+		let nextFruitId = 3
+		let speed = 800
+		let isRightArrow = 0
+		let GamePlay = true
 		let app = new Vue({
 			el:'#canvas',
 			data:{
+				isRightArrow: isRightArrow,
+				speed: speed,
 				play:true,
-				time:0,
+				turn:0,//จาก time เปลี่ยนเป็น turn นะเผื่อมองไม่เห็น
 				score:0,
 				fruits:[
-					{id:1,type:13,pst:6,run:true,step:1},
-					{id:2,type:11,pst:3,run:true,step:1},
-					{id:3,type:11,pst:2,run:true,step:1},
-					{id:4,type:13,pst:1,run:true,step:1},
+					{id:1,type:'red',pst:5,run:true,step:1},
+					{id:2,type:'yellow',pst:2,run:true,step:1},
+					// type คือ ชื่อของตัวผลไม้เราเอาไว้แก้ไขใน CSS
+					// pst คือ ตำแหน่งของผลไม้เรายืนอยู่ช่องไหน
+					// run คือ บอกสถานะว่าให้เคลื่อนที่ได้
+					// step คือ บวกเลขการเดินช่องเท่าไหร่(พี่เขาบอกว่า +1 คือเดินไปด้านบน ส่วน +3 เดินไปด้านขวา)
 				]
+			},
+			methods:{
+				ClickToggle: function(){
+					if (this.isRightArrow == 1) {
+						this.isRightArrow = 0
+					}
+					else if(this.isRightArrow == 0){
+						this.isRightArrow = 1
+					}
+				},
+				ReGame: function(){
+					location.reload()
+				}
+			},
+			coputed:{},
+			watch:{
+				turn: function (x){ //ฟังชั่นในเดินในแต่ละ turn ต้องทำส่วนในนี้
+					let count = this.fruits.length
+					for(let f in this.fruits){
+						let run = this.fruits[f].run
+						if (run) {
+							if (this.fruits[f].pst == 11) {
+								this.fruits[f].pst = this.fruits[f].pst + 1
+								if (this.fruits[f].type == 'red') {
+									this.score++
+									this.speed-=200
+								}
+								else if(this.fruits[f].type == 'yellow'){
+									GamePlay = false
+									app.play = false
+								}
+								this.fruits[f].run = false
+							}
+							else if(this.fruits[f].pst == 13) {
+								this.fruits[f].pst = this.fruits[f].pst + 3
+								if (this.fruits[f].type == 'yellow') {
+									this.score++
+									this.speed-=200
+								}
+								else if(this.fruits[f].type == 'red'){
+									GamePlay = false
+									app.play = false
+								}
+								this.fruits[f].run = false
+							}
+							else if (this.fruits[f].pst == 10 && this.isRightArrow == 1){
+							this.fruits[f].pst = this.fruits[f].pst + 3
+							}
+							else{
+							this.fruits[f].pst = this.fruits[f].pst + 1
+							}
+						}
+					}
+					let born = rand(0,1)
+					let RanColor = rand(0,1)
+					let IdBtn = 3
+					if (born == 0) {
+						if (RanColor == 0) {
+							this.fruits.push({
+							id:IdBtn,
+							type:'red',
+							pst:1,
+							run:true,
+							step:1
+							})
+						}
+						else{
+							this.fruits.push({
+							id:IdBtn,
+							type:'yellow',
+							pst:1,
+							run:true,
+							step:1
+							})
+						}
+						
+					}
+				}
 			}
 		})
+
+		let playing = setInterval(function(){
+			if (GamePlay == true) {
+				app.turn++
+			}
+		},speed)
 	</script>
 </body>
 </html>
