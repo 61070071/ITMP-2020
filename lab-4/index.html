@@ -10,32 +10,30 @@
 	<div id="canvas">
 		<section id="canvas_header">
 			<div>
-				เหลือเวลา 10 วินาที
+				เหลือเวลา {{time}} วินาที
 			</div>
 		</section>
 		<section id="canvas_main">
 			<main>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
-				<a-dot style="--l:80%"></a-dot>
-				<a-dot data-pick="true"></a-dot>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
+				<a-dot v-for="i in row*row"
+				:style="{
+				'--row':row,
+				'--h':h,
+				'--l':l+'%',
+			}"
+			:data-pick="i == pick"
+			@click="check(i == pick)"></a-dot>
 			</main>
 		</section>
 		<section id="canvas_footer">
 			<div>
-				0 คะแนน
+				{{score}} คะแนน
 			</div>
 		</section>
 	</div>
-
+ 
 	<script>
 		let picklight = "20%" //เลือกว่ารอบนี้ อันพิเศษจะมีความสว่าง 20%
-		document.registerElement('a-dot') //ให้ vue รู้จัก a-dot
 
 		function rand(start,stop){//สร้างฟังก์ชัน random ไว้ใช้
 			let shift = (stop-start)+1
@@ -46,14 +44,30 @@
 			el:'#canvas',
 			data:{
 				row:2, //จำนวนแถวที่จะมีในรอบนี้
-				h:330, // hue ในรอบนี้
-				time:10, //เวลาเริ่มต้น
+				h:180, // hue ในรอบนี้
+				time:30, //เวลาเริ่มต้น
 				score:0, //คะแนนเริ่มต้น
 				pick:1, //หมายเลขวงกลมที่จะสีแตกต่างจากก้อนอื่นๆ
-				l:30,//ความสว่างของสีทั่วไปในรอบนี้
+				l:50,//ความสว่างของสีทั่วไปในรอบนี้
 			},
 			methods: {
+				check: function(e){
+					console.log(e)
+					if (e == true) {
+						app.correct()
+					}
+					else{
+						app.score-=10
+					}
+				},
+				correct: function(){
+					this.row = rand(2,12)
+					this.pick = rand(1,this.row*this.row)
+					this.score+=5
+					this.h = rand(0,360)
+					this.l = rand(25,60)
 
+				}
 			}
 		})
 		//ทำให้แคนวาสมี --picklight ตามที่กำหนดไว้ข้างบนนี้
@@ -64,6 +78,9 @@
 				app.time--
 			}else{
 				clearInterval(counter)
+				alert("Score = " + app.score)
+				app.score = 0
+				location.reload()
 			}
 		},1000);
 	</script>

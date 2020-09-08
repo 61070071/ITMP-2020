@@ -8,18 +8,30 @@
 </head>
 <body>
 	<div id="app">
-		
+		<h1>{{person.name}}</h1>
+		<h5>username: {{person.username}}</h5>
+		<h5>email: {{person.email}}</h5>
+		<h5>website: {{person.website}}</h5>
+		<h5>company: {{person.company.name}}</h5>
+		<h2>Members</h2>
+		<h4 v-for="u in users" :data-id="u.id" @click="viewBio(u)">{{u.name}}</h4>
 	</div>
 	
 
 	<script>
 		fetch('https://jsonplaceholder.typicode.com/users')
 		.then(response => response.json())
-		.then(json => {console.log(json)})
+		.then(json => {
+			console.log(json);
+			app.users = json
+			app.person = json[0]
+		})	
+
 		let app = new Vue({
 			el: '#app',
 			data: {
-				users :[],
+				users :[
+				],
 				person:{
 					id:0,
 					name:'..loading',
@@ -30,9 +42,19 @@
 						name : '..loading',
 					}
 				}	
+			},
+			methods:{
+				viewBio: function(user){
+					this.person = user
+				}
 			}
 		})
 
+		// function viewUser(el){
+		// 	let id = el.dataset.id-1;
+		// 	console.log(el)
+		// 	app.person = app.users[id]
+		// }
 	</script>
 </body>
 </html>
